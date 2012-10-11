@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-# JS Auto DeObfuscator v. 0.5
-# by Luciano Giuseppe
+# JS Auto DeObfuscator v. 0.5 by Luciano Giuseppe
 # Useful on deobfuscation by a function as eval
 
 import subprocess
