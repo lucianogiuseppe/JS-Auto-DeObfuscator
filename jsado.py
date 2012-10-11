@@ -43,6 +43,7 @@ def getHackString(f, l):
 			});
 			$div.appendChild($button);
 			$code = document.createElement("textarea");
+			$code.setAttribute("readonly", "readonly");
 			$code.setAttribute("style","display:block; height:95%; width:98%; overflow:auto");
 			$div.appendChild($code);
 			if(document.body === undefined || document.body === null)	{		
@@ -99,7 +100,8 @@ if __name__ == "__main__":
 		sys.exit()
 
 	print("Work completed: browser running...")
-	subprocess.call(["firefox", outputFileName]);
+	subprocess.CREATE_NEW_CONSOLE=True
+	subprocess.Popen(["firefox", outputFileName]);
 	print("If there're in some ReferenceError errors in js console or the js deobuscated shows strange strings or seems to be obfuscated use increment!")
 	
 	answer = raw_input("\nDo you want to increment the n_execution? y/n : ")
