@@ -29,15 +29,17 @@ def getHackString(f, l):
 			var $div = document.createElement("div");
 			$div.setAttribute("style", "width:95%; height:95%; overflow:no;z-index:100;position:absolute;bottom:0;left:0;border:1px solid black; background:white;");
 			var $button = document.createElement("button");
-			$button.innerHTML = "Open/Close";
+			$button.innerHTML = "Minimize";
 			$button.addEventListener("click", function() {
 				var $p = this.parentNode;				
 				if($p.style.height=="30px") {
 					$p.childNodes[1].style.display="block";
 					$p.style.height="95%";
+					this.innerHTML="Minimize";
 				} else {
 					$p.childNodes[1].style.display="none";
 					$p.style.height="30px";
+					this.innerHTML="Maximize";
 				}
 			});
 			$div.appendChild($button);
