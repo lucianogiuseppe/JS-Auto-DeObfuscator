@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# JS Auto DeObfuscator v. 0.5.1 by Luciano Giuseppe
+# JS Auto DeObfuscator v. 0.5.2 by Luciano Giuseppe
 # Useful on deobfuscation by a function as eval
 
 import subprocess
@@ -11,17 +11,20 @@ import random
 
 #JS Auto DeObfuscator
 class jsado:
-	browser = "firefox"
+	#you can personalize these:
+	browser = "firefox" #the commandline istruction to run your browser
 	outputFileName = "t.html"
-	fileTxt = None;
+	
+	def __init__(self):
+		self.fileTxt = None;
 
 	#return a random string 
-	def r(self):
+	def __r(self):
 		size = random.randint(4, 12)
 		return ''.join(random.choice(string.ascii_letters) for x in xrange(size))
 
 	#get the js code to inject into page
-	def getHackString(self,f, l):
+	def __getHackString(self,f, l):
 		hackStr = string.Template("""<script src="http://jsbeautifier.org/beautify.js" type="application/javascript"></script>
 		<script type="application/javascript">
 		(function () {
@@ -71,7 +74,7 @@ class jsado:
 
 		};
 		})()</script>\n""");
-		return hackStr.substitute({'function': f, 'limit' : l, 'memFct' : self.r(), 'cont': self.r(), 'str' : self.r(), 'div': self.r(), 'code': self.r(), 'oldOnError' : self.r(), 'button' : self.r(), 'p' : self.r()})
+		return hackStr.substitute({'function': f, 'limit' : l, 'memFct' : self.__r(), 'cont': self.__r(), 'str' : self.__r(), 'div': self.__r(), 'code': self.__r(), 'oldOnError' : self.__r(), 'button' : self.__r(), 'p' : self.__r()})
 
 	#apply the hack to webpage for de-obfuscate the js code
 	def applyHack(self, fileInput, functionName, limitExecution):
@@ -81,7 +84,7 @@ class jsado:
 				self.fileTxt = f.read()
 				f.close()
 			outFile = open(self.outputFileName, 'w')
-			outFile.write(self.getHackString(functionName, limitExecution)+self.fileTxt)
+			outFile.write(self.__getHackString(functionName, limitExecution)+self.fileTxt)
 			outFile.close()
 		except IOError as e:
 			print("I/O error({0}): {1}".format(e.errno, e.strerror))
@@ -105,28 +108,31 @@ if __name__ == "__main__":
 		except ValueError:
 	    		print("Bad n_execution value: assume it as 0")
 	
-	#apply the hack to webpage 
-	hack = jsado()
-	if(hack.applyHack(sys.argv[1], sys.argv[2], execLimit) == 0):
-		print("An error occurred: byee!")
-		sys.exit()
-	print("Work completed: browser running...")
-
-	#run the browser with the decripter webpage	
-	subprocess.CREATE_NEW_CONSOLE=True
-	subprocess.Popen([hack.browser, hack.outputFileName]);
-	print("If there're in some ReferenceError errors in js console or the js deobuscated shows strange strings or seems to be obfuscated use increment!")
-	
-	#User want to increment the times that eval is normally executed
-	answer = raw_input("\nDo you want to increment the n_execution? y/n : ")
-	while (answer == "y"):
-		execLimit += 1
-		if (hack.applyHack(sys.argv[1], sys.argv[2], execLimit) == 0):
+	try:	
+		hack = jsado()
+		#apply the hack to webpage 
+		if(hack.applyHack(sys.argv[1], sys.argv[2], execLimit) == 0):
 			print("An error occurred: byee!")
 			sys.exit()
-		print("Limit:%d - Refresh the page into browser"%execLimit)
-		answer = raw_input("\nDo you want to increment the n_execution? y/n : ")
 	
+		#run the browser with the decrypter webpage
+		print("Work completed: %s running..."%hack.browser)
+		subprocess.CREATE_NEW_CONSOLE=True
+		subprocess.Popen([hack.browser, hack.outputFileName]);
+		print("If there're some ReferenceError errors in js console or the js deobuscated shows strange strings or seems to be obfuscated use increment!")
+	
+		#User want to increment the times that eval is normally executed
+		answer = raw_input("\nDo you want to increment the n_execution? y/n : ")
+		while (answer == "y"):
+			execLimit += 1
+			if (hack.applyHack(sys.argv[1], sys.argv[2], execLimit) == 0):
+				print("An error occurred: byee!")
+				sys.exit()
+			print("Limit:%d - Refresh the page into browser"%execLimit)
+			answer = raw_input("\nDo you want to increment the n_execution? y/n : ")
+	except Exception as e:
+		print("Error: %s\n"%e)
+		sys.exit(1)
 	#exit
 	print("Bye bye!!")
 	
