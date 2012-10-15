@@ -19,15 +19,13 @@ If you want to use Chrome with jsado_selenium.py, you must to run only the Chrom
 After that you can use these scripts:
 
 python jsado.py file.html function_to_hack [n_execution=0] 
+python jsado_selenium.py file.html function_to_hack [n_execution=0] 
 
 You can call this script with: "python jsado.py obf.html eval" to don't let's execute eval in obf.html and get into the browser all js code executed with eval.
-You can use the increment to let execute eval one time , for example: the first time with eval there are some variables declaration.
-
-If you want to use 
+You can use the increment to let execute eval one time, for example: the first time with eval there are some variables declaration.
 
 ##How JSADO works
 JSADO injects into the webpage a js script, that hook the function. Once the function hooked is executed, the js script injected shows a pannel with the code catched.
-
 
 ##Personalization
 You can open the python files and edit: browser/browserName,outputFileName in jsado class.
