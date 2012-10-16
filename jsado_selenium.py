@@ -27,7 +27,7 @@ class jsado:
 	def __init__(self):
 		self.fileTxt = None;
 		self.outputFileName = os.getcwd()+"/"+ self.outputFileName
-		self.outputUrlName = "file:///"+self.outputFileName
+		self.outputUrlName = "file://"+self.outputFileName
 
 	#return a random string 
 	def __r(self):
