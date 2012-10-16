@@ -14,14 +14,15 @@ jsado_selenium.py to run has need of:
 
 ##How to use
 If you want to use jsado_selenium.py, you need to run the selenium-server: java -jar selenium-server-standalone-2.25.0.jar
-If you want to use Chrome with jsado_selenium.py, you must to run only the ChromeDriver
+If you want to use Chrome with jsado_selenium.py, you must to run only the ChromeDriver.
 
 After that you can use these scripts:
 
 python jsado.py file.html function_to_hack [n_execution=0] 
+
 python jsado_selenium.py file.html function_to_hack [n_execution=0] 
 
-You can call this script with: "python jsado.py obf.html eval" to don't let's execute eval in obf.html and get into the browser all js code executed with eval.
+For example: you can call this script with: "python jsado.py obf.html eval" to don't let's execute eval in obf.html and get into the browser all js code executed with eval.
 You can use the increment to let execute eval one time, for example: the first time with eval there are some variables declaration.
 
 ##How JSADO works
