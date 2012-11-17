@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# JS Auto DeObfuscator v. 0.5.2 by Luciano Giuseppe
+# JS Auto DeObfuscator v. 0.5.3 by Luciano Giuseppe
 # Useful on deobfuscation by a function as eval
 
 import subprocess
@@ -32,6 +32,13 @@ class jsado:
 		$cont = 0;
 		$str = "";
 		$function = function(ttt) {
+			if(typeof(ttt) === "object") {
+				var str = "Object Dump:\\n\\n";
+				for(var t in ttt) {
+					str += t +":"+ttt[t]+"\\n";			
+				}
+				ttt = str;			
+			}
 			$cont++;		
 			$str += $cont+ ")" +ttt +"\\n\\n";
 			if($cont == 1) {
@@ -80,12 +87,12 @@ class jsado:
 	def applyHack(self, fileInput, functionName, limitExecution):
 		try:
 			if self.fileTxt is None:
-				f = open(fileInput, 'r');
-				self.fileTxt = f.read()
-				f.close()
-			outFile = open(self.outputFileName, 'w')
-			outFile.write(self.__getHackString(functionName, limitExecution)+self.fileTxt)
-			outFile.close()
+				with open(fileInput, 'r') as f:
+					self.fileTxt = f.read()
+
+			with open(self.outputFileName, 'w') as outFile:
+				outFile.write(self.__getHackString(functionName, limitExecution)+self.fileTxt)
+
 		except IOError as e:
 			print("I/O error({0}): {1}".format(e.errno, e.strerror))
 			return 0
