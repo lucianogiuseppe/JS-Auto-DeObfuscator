@@ -101,7 +101,7 @@ class jsado:
 
 # Main
 if __name__ == "__main__":
-	print("JS Auto DeObfuscator v. 0.5.1\n")	
+	print("JS Auto DeObfuscator v. 0.5.3\n")	
 
 	#checks the args
 	argLen = len(sys.argv)	
