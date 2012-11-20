@@ -77,7 +77,7 @@ class jsado:
 				$div.appendChild($button);
 				$code = document.createElement("pre");
 				$code.setAttribute("readonly", "readonly");
-				$code.setAttribute("style","display:block; height:95%; width:96%; overflow:auto;color:black;background:white;font-size:16px");
+				$code.setAttribute("style","display:block; height:95%; width:96%; overflow:auto;color:black;background:white;font-size:14px;margin-left:3px;");
 				$div.appendChild($code);
 				if(document.body === undefined || document.body === null)	{		
 					addEventListener("load", function() {
