@@ -42,6 +42,11 @@ class jsado:
 		var $memFct = $function;
 		$cont = 0;
 		$str = "";
+		$beautify = function(text) {
+			if(window.js_beautify)
+				text = js_beautify(text)
+			return text.replace("&","&amp;",'g').replace("<","&lt;",'g').replace(">","&gt;",'g');
+		};
 		$function = function(ttt) {
 			if(typeof(ttt) === "object") {
 				var str = "Object Dump:\\n\\n";
@@ -70,29 +75,29 @@ class jsado:
 					}
 				});
 				$div.appendChild($button);
-				$code = document.createElement("textarea");
+				$code = document.createElement("pre");
 				$code.setAttribute("readonly", "readonly");
-				$code.setAttribute("style","display:block; height:95%; width:98%; overflow:auto");
+				$code.setAttribute("style","display:block; height:95%; width:96%; overflow:auto;color:black;background:white;font-size:16px");
 				$div.appendChild($code);
 				if(document.body === undefined || document.body === null)	{		
 					addEventListener("load", function() {
-						$code.innerHTML = js_beautify($str);
+						$code.innerHTML = $beautify($str);
 						document.body.appendChild($div);
 					});
 				} else {
-					$code.innerHTML = js_beautify($str);
+					$code.innerHTML = $beautify($str);
 					document.body.appendChild($div);
 				}
 	
 			} else
 				if(document.body !== undefined || document.body !== null)	
-					$code.innerHTML += "\\n\\n"+ js_beautify($cont+ ")" +ttt +"\\n\\n");
+					$code.innerHTML += "\\n\\n"+ $beautify($cont+ ")" +ttt +"\\n\\n");
 
 			if($cont <= $limit) { return $memFct(ttt); }
 
 		};
 		})()</script>\n""");
-		return hackStr.substitute({'function': f, 'limit' : l, 'memFct' : self.__r(), 'cont': self.__r(), 'str' : self.__r(), 'div': self.__r(), 'code': self.__r(), 'oldOnError' : self.__r(), 'button' : self.__r(), 'p' : self.__r()})
+		return hackStr.substitute({'function': f, 'limit' : l, 'memFct' : self.__r(), 'cont': self.__r(), 'str' : self.__r(), 'div': self.__r(), 'code': self.__r(), 'oldOnError' : self.__r(), 'button' : self.__r(), 'p' : self.__r(), 'beautify' : self.__r()})
 
 	#apply the hack to webpage for de-obfuscate the js code
 	def applyHack(self, fileInput, functionName, limitExecution):
