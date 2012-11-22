@@ -29,7 +29,7 @@ You can use the increment to let execute eval one time, for example: the first t
 JSADO injects into the webpage a js script, that hook the function. Once the function hooked is executed, the js script injected shows a pannel with the code catched.
 
 ##Personalization
-You can open the python files and edit: browser/browserName,outputFileName in jsado class.
+You can open jsado.py and edit: browserName, outputFileName or decomment in hackStr the import of js beautify
 For jsado_selenium.py and Chrome: the default port is 9515, if you need: change it.
 
 ##Developer
