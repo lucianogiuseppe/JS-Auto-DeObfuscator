@@ -57,14 +57,14 @@ if __name__ == "__main__":
 		print("If there're some ReferenceError errors in js console or the js deobuscated shows strange strings or seems to be obfuscated use increment!")
 	
 		#User want to increment the times that eval is normally executed
-		answer = raw_input("\nDo you want to increment the n_execution? y/n : ")
+		answer = raw_input("\nDo you want to increment the " + sys.argv[2] + " execution times? y/n : ")
 		while (answer == "y"):
 			execLimit += 1
 			if (hack.applyHack(sys.argv[1], sys.argv[2], execLimit, useJsBeauty) == 0):
 				print("An error occurred: byee!")
 				sys.exit()
 			print("Limit:%d - Refresh the page into browser"%execLimit)
-			answer = raw_input("\nDo you want to increment the n_execution? y/n : ")
+			answer = raw_input("Do you want to increment the " + sys.argv[2] + " execution times? y/n : ")
 	except Exception as e:
 		print("Error: %s\n"%e)
 		sys.exit(1)
