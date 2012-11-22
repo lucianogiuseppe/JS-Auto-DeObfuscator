@@ -16,9 +16,9 @@ jsado_selenium.py to run has need of:
 If you want to use jsado_selenium.py, you need to run the selenium-server: java -jar selenium-server-standalone-2.25.0.jar
 If you want to use Chrome with jsado_selenium.py, you must to run only the ChromeDriver.
 
-After that you can use these scripts:
+After that you can use these scripts: download jsado.py and jsado_std.py and/or jsado_selenium.py
 
-python jsado.py file.html function_to_hack [n_execution=0] 
+python jsado_std.py file.html function_to_hack [n_execution=0] 
 
 python jsado_selenium.py file.html function_to_hack [n_execution=0] 
 
