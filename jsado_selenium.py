@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# JS Auto DeObfuscator with Selenium support v. 0.2 by Luciano Giuseppe
+# JS Auto DeObfuscator with Selenium by Luciano Giuseppe
 # Useful on deobfuscation by a function as eval
 #
 #Dependencies: Selenium for python: http://pypi.python.org/pypi/selenium, Selenium server:http://seleniumhq.org/download/
@@ -11,112 +11,18 @@ import sys
 import os
 import string
 import random
+from jsado import jsado
+
 #for selenium
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-#JS Auto DeObfuscator
-class jsado:
-	#you can personalize these:
-	browserName = "firefox" #browser supported: chrome or firefox
-	outputFileName = "t.html"
-	
-	
-	def __init__(self):
-		self.fileTxt = None;
-		self.outputFileName = os.getcwd()+"/"+ self.outputFileName
-		self.outputUrlName = "file://"+self.outputFileName
-
-	#return a random string 
-	def __r(self):
-		size = random.randint(4, 12)
-		return ''.join(random.choice(string.ascii_letters) for x in xrange(size))
-
-	#get the js code to inject into page
-	def __getHackString(self,f, l):
-		hackStr = string.Template("""<script src="http://jsbeautifier.org/beautify.js" type="application/javascript"></script>
-		<script type="application/javascript">
-		(function () {
-		var $memFct = $function;
-		$cont = 0;
-		$str = "";
-		$beautify = function(text) {
-			if(window.js_beautify)
-				text = js_beautify(text)
-			return text.replace("&","&amp;",'g').replace("<","&lt;",'g').replace(">","&gt;",'g');
-		};
-		$function = function(ttt) {
-			if(typeof(ttt) === "object") {
-				var str = "Object Dump:\\n\\n";
-				for(var t in ttt) {
-					str += t +":"+ttt[t]+"\\n";			
-				}
-				ttt = str;			
-			}
-			$cont++;		
-			$str += $cont+ ")" +ttt +"\\n\\n";
-			if($cont == 1) {
-				var $div = document.createElement("div");
-				$div.setAttribute("style", "width:95%; height:95%; overflow:no;z-index:100;position:absolute;bottom:0;left:0;border:1px solid black; background:white;");
-				var $button = document.createElement("button");
-				$button.innerHTML = "Minimize";
-				$button.addEventListener("click", function() {
-					var $p = this.parentNode;				
-					if($p.style.height=="30px") {
-						$p.childNodes[1].style.display="block";
-						$p.style.height="95%";
-						this.innerHTML="Minimize";
-					} else {
-						$p.childNodes[1].style.display="none";
-						$p.style.height="30px";
-						this.innerHTML="Maximize";
-					}
-				});
-				$div.appendChild($button);
-				$code = document.createElement("pre");
-				$code.setAttribute("readonly", "readonly");
-				$code.setAttribute("style","display:block; height:95%; width:96%; overflow:auto;color:black;background:white;font-size:14px;margin-left:3px;");
-				$div.appendChild($code);
-				if(document.body === undefined || document.body === null)	{		
-					addEventListener("load", function() {
-						$code.innerHTML = $beautify($str);
-						document.body.appendChild($div);
-					});
-				} else {
-					$code.innerHTML = $beautify($str);
-					document.body.appendChild($div);
-				}
-	
-			} else
-				if(document.body !== undefined || document.body !== null)	
-					$code.innerHTML += "\\n\\n"+ $beautify($cont+ ")" +ttt +"\\n\\n");
-
-			if($cont <= $limit) { return $memFct(ttt); }
-
-		};
-		})()</script>\n""");
-		return hackStr.substitute({'function': f, 'limit' : l, 'memFct' : self.__r(), 'cont': self.__r(), 'str' : self.__r(), 'div': self.__r(), 'code': self.__r(), 'oldOnError' : self.__r(), 'button' : self.__r(), 'p' : self.__r(), 'beautify' : self.__r()})
-
-	#apply the hack to webpage for de-obfuscate the js code
-	def applyHack(self, fileInput, functionName, limitExecution):
-		try:
-			if self.fileTxt is None:
-				with open(fileInput, 'r') as f:
-					self.fileTxt = f.read()
-
-			with open(self.outputFileName, 'w') as outFile:
-				outFile.write(self.__getHackString(functionName, limitExecution)+self.fileTxt)
-		except IOError as e:
-			print("I/O error({0}): {1}".format(e.errno, e.strerror))
-			return 0
-		else:
-			return 1
 
 # Main
 if __name__ == "__main__":
-	print("JS Auto DeObfuscator with Seleniumv. 0.2\n")	
+	print("JS Auto DeObfuscator with Selenium\n")	
 
 	#checks the args
 	argLen = len(sys.argv)	
