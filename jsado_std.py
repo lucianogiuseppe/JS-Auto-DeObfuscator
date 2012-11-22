@@ -22,7 +22,7 @@ def parseArgv(argv):
 			try:	
 				execLimit = int(str[1])
 			except ValueError:
-		    		print("Bad n_execution value: assume it as 0")
+		    		print("Bad nExec value: assume it as 0")
 		elif str[0].lower() == "usejb":
 			useJsBeauty = True;
 	

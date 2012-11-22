@@ -31,7 +31,7 @@ def parseArgv(argv):
 			try:	
 				execLimit = int(str[1])
 			except ValueError:
-		    		print("Bad n_execution value: assume it as 0")
+		    		print("Bad nExec value: assume it as 0")
 		elif str[0].lower() == "usejb":
 			useJsBeauty = True;
 	
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
 	argLen = len(sys.argv)	
 	if (argLen < 3):
-		print( os.path.basename(__file__)+" file.html function_to_hack [n_execution]")
+		print( os.path.basename(__file__)+" file.html function_to_hack [nExec:number] [useJB]")
 		sys.exit()
 	else:
 		execLimit, useJsBeauty = parseArgv(sys.argv);
