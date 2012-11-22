@@ -19,27 +19,43 @@ from selenium.common.exceptions import NoSuchElementException, WebDriverExceptio
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
+#Parse the argv
+def parseArgv(argv):
+	execLimit = 0
+	useJsBeauty = False
+	
+	argLen = len(sys.argv)
+	for x in xrange(3,argLen): 
+		str = argv[x].split(':')
+		if str[0].lower() == "nexec":
+			try:	
+				execLimit = int(str[1])
+			except ValueError:
+		    		print("Bad n_execution value: assume it as 0")
+		elif str[0].lower() == "usejb":
+			useJsBeauty = True;
+	
+	return [execLimit, useJsBeauty]
 
 # Main
 if __name__ == "__main__":
 	print("JS Auto DeObfuscator with Selenium\n")	
 
 	#checks the args
-	argLen = len(sys.argv)	
 	execLimit = 0
+	useJsBeauty = False
+
+	argLen = len(sys.argv)	
 	if (argLen < 3):
 		print( os.path.basename(__file__)+" file.html function_to_hack [n_execution]")
 		sys.exit()
-	elif(argLen == 4):
-		try:	
-			execLimit = int(sys.argv[3])
-		except ValueError:
-	    		print("Bad n_execution value: assume it as 0")
+	else:
+		execLimit, useJsBeauty = parseArgv(sys.argv);
 	
 	try:	
 		hack = jsado()
 		#apply the hack to webpage
-		if(hack.applyHack(sys.argv[1], sys.argv[2], execLimit) == 0):
+		if(hack.applyHack(sys.argv[1], sys.argv[2], execLimit, useJsBeauty) == 0):
 			print("An error occurred: byee!")
 			sys.exit()
 		
@@ -58,7 +74,7 @@ if __name__ == "__main__":
 		answer = raw_input("\nDo you want to increment the n_execution? y/n : ")
 		while (answer == "y"):
 			execLimit += 1
-			if (hack.applyHack(sys.argv[1], sys.argv[2], execLimit) == 0):
+			if (hack.applyHack(sys.argv[1], sys.argv[2], execLimit, useJsBeauty) == 0):
 				print("An error occurred: byee!")
 				sys.exit()
 			print("Limit:%d - Page refreshing...\n"%execLimit)

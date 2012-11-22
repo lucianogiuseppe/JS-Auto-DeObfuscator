@@ -21,7 +21,7 @@ class jsado:
 
 	#get the js code to inject into page
 	def __getHackString(self,f, l):
-		hackStr = string.Template("""<!-- Decomment to use jsBeautify <script src="http://jsbeautifier.org/beautify.js" type="application/javascript"></script>-->
+		hackStr = string.Template("""
 		<script type="application/javascript">
 		(function () {
 		var $memFct = $function;
@@ -96,14 +96,18 @@ class jsado:
 		return hackStr.substitute({'function': f, 'limit' : l, 'memFct' : self.__r(), 'cont': self.__r(), 'str' : self.__r(), 'div': self.__r(), 'code': self.__r(), 'oldOnError' : self.__r(), 'p' : self.__r(), 'beautify' : self.__r()})
 
 	#apply the hack to webpage for deobfuscate the js code
-	def applyHack(self, fileInput, functionName, limitExecution):
+	def applyHack(self, fileInput, functionName, limitExecution, useJB):
 		try:
 			if self.fileTxt is None:
 				with open(fileInput, 'r') as f:
 					self.fileTxt = f.read()
 
 			with open(self.outputFileName, 'w') as outFile:
-				outFile.write(self.__getHackString(functionName, limitExecution)+self.fileTxt)
+				outString = ""				
+				if useJB == True:
+					outString += "<script src=\"http://jsbeautifier.org/beautify.js\" type=\"application/javascript\"></script>"
+				outString += self.__getHackString(functionName, limitExecution)+self.fileTxt
+				outFile.write(outString)
 
 		except IOError as e:
 			print("I/O error({0}): {1}".format(e.errno, e.strerror))
