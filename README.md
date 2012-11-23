@@ -32,7 +32,7 @@ You can use the increment to let execute eval one time, for example: the first t
 JSADO injects into the webpage a js script, that hook the function. Once the function hooked is executed, the js script injected shows a pannel with the code catched.
 
 ##Personalization
-You can open jsado.py and change: browserName, outputFileName and useSelenium to don't set 'useS' every time 
+You can open jsado.py and change: browserName, outputFileName and useSelenium to don't set 'useS' every time.
 For Selenium and Chrome: the default port is 9515, if you need: change it.
 
 ##Developer
