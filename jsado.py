@@ -1,17 +1,37 @@
+#!/usr/bin/python
+
+# JS Auto DeObfuscator 0.6 by Luciano Giuseppe
+# Useful on deobfuscation by a function as eval
+#
+#Dependencies: Selenium for python: http://pypi.python.org/pypi/selenium, Selenium server:http://seleniumhq.org/download/
+#More infos: http://pypi.python.org/pypi/selenium
+
+import subprocess
 import sys
 import os
 import string
 import random
 
-#JS Auto DeObfuscator Class v .6 by Luciano Giuseppe
+#for selenium
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, WebDriverException
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
+#you can personalize these:
+useSelenium = False # True o False
+browserName = "firefox" #the commandline istruction to run your browser
+outputFileName = "t.html" #output filename
+
+#JS Auto DeObfuscator Class by Luciano Giuseppe
 class jsado:
-	#you can personalize these:
-	browserName = "firefox" #the commandline istruction to run your browser
-	outputFileName = "t.html"
 	
-	def __init__(self):
+	#Init some class attributes
+	#browserName: the commandline istruction to run your browser
+	#outputFileName: output filename
+	def __init__(self, browserName, outputFileName):
 		self.fileTxt = None;
-		self.outputFileName = os.getcwd() + os.sep + self.outputFileName
+		self.browserName = browserName
+		self.outputFileName = os.getcwd() + os.sep + outputFileName
 		self.outputUrlName = "file://"+self.outputFileName
 
 	#return a random string 
@@ -114,3 +134,115 @@ class jsado:
 			return 0
 		else:
 			return 1
+
+
+#Browser launcher factory
+class LauncherFactory(object):
+	def __new__(cls, selenium):
+		if selenium == True:
+			return LauncherSelenium()
+		else:
+			return LauncherNormal()
+
+#Launcher that use Selenium to inteface with browser
+class LauncherSelenium:
+	browser = None
+
+	def start(self,browserName, outputUrlName):
+		if browserName == "chrome":
+			self.browser = webdriver.chrome.webdriver.WebDriver(executable_path='chromium-browser', port=9515);
+		else:
+			self.browser = webdriver.Firefox() # Get local session of firefox
+		self.browser.get(outputUrlName) # Load page
+	
+	def refresh(self):
+		if self.browser == None:
+			return
+		self.browser.refresh()
+
+#Normal browser launcher
+class LauncherNormal:
+
+	def start(self, browserName, outputUrlName):
+		subprocess.CREATE_NEW_CONSOLE=True
+		subprocess.Popen([hack.browserName, hack.outputFileName]);
+	
+	def refresh(self):
+		return
+
+
+
+#Parse the argv
+def parseArgv(argv):
+	global useSelenium
+	execLimit = 0
+	useJsBeauty = False
+	
+	argLen = len(sys.argv)
+	for x in xrange(3,argLen): 
+		str = argv[x].split(':')
+		if str[0].lower() == "nexec":
+			try:	
+				execLimit = int(str[1])
+			except ValueError:
+		    		print("Bad nExec value: assume it as 0")
+		elif str[0].lower() == "usejb":
+			useJsBeauty = True;
+		elif str[0].lower() == "uses":
+			useSelenium = True
+	
+	return [execLimit, useJsBeauty]
+
+# Main
+if __name__ == "__main__":
+	print("JS Auto DeObfuscator 0.6\n")	
+
+	#checks the args
+	execLimit = 0
+	useJsBeauty = False
+
+	argLen = len(sys.argv)	
+	if (argLen < 3):
+		print( os.path.basename(__file__)+" file.html function_to_hack [nExec:number] [useJB] [useS]")
+		sys.exit()
+	else:
+		execLimit, useJsBeauty = parseArgv(sys.argv);
+	
+	try:	
+		#Prepare the jsado
+		hack = jsado(browserName, outputFileName)
+		#Prepare the browser launcher
+		launcher = LauncherFactory(useSelenium)
+
+		#apply the hack to webpage
+		if(hack.applyHack(sys.argv[1], sys.argv[2], execLimit, useJsBeauty) == 0):
+			print("An error occurred: byee!")
+			sys.exit()
+		
+		#try to run the browser with the decrypter webpage
+		print("Work completed: %s running..."%hack.browserName)
+		launcher.start(hack.browserName, hack.outputUrlName)
+
+		#Some descryption about the use
+		print("If there're some ReferenceError errors in js console or the js deobuscated shows strange strings or seems to be obfuscated use increment!")
+	
+		#User want to increment the times that eval is normally executed
+		answer = raw_input("\nDo you want to increment the " + sys.argv[2] + " execution times? y/n : ")
+		while (answer == "y"):
+			execLimit += 1
+			if (hack.applyHack(sys.argv[1], sys.argv[2], execLimit, useJsBeauty) == 0):
+				print("An error occurred: byee!")
+				sys.exit()
+			print("Limit:%d - Page refreshing...\n"%execLimit)
+			launcher.refresh() #refresh the page
+			answer = raw_input("Do you want to increment the " + sys.argv[2] + " execution times? y/n : ")
+	except WebDriverException as e:
+		print("Selenium error: %s\n"%e.msg.strip())
+		sys.exit(1)
+	except Exception as e:
+		print("Error: %s\n"%e)
+		sys.exit(1)
+	
+	#exit
+	print("Bye bye!!")
+	
