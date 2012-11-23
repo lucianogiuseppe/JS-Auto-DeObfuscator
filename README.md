@@ -13,18 +13,17 @@ jsado_selenium.py to run has need of:
 * ChromeDriver for Chrome support: https://code.google.com/p/chromedriver/
 
 ##How to use
-If you want to use jsado_selenium.py, you need to run the selenium-server: java -jar selenium-server-standalone-2.25.0.jar
-If you want to use Chrome with jsado_selenium.py, you must to run only the ChromeDriver.
+If you want to use Firefox with Selenium you must run the selenium-server: java -jar selenium-server-standalone-XX.jar
+If you want to use Chrome with Selenium you must run only the ChromeDriver.
 
-After that you can use these scripts: download jsado.py and jsado_std.py and/or jsado_selenium.py
+After that you can use these scripts: download jsado.py and run
 
-python jsado_std.py file.html function_to_hack [nExec:0] [useJB] 
-
-python jsado_selenium.py file.html function_to_hack [nExec:0] [useJB] 
+python jsado.py file.html function_to_hack [nExec:0] [useJB] [useS]
 
 where 
 	nExec says that the function_to_hack have to be executed nExec times normally
 	useJB says to use "js beautify" to show the output
+	useS says to use Selenium
 
 For example: you can call this script with: "python jsado.py obf.html eval" to don't let's execute eval in obf.html and get into the browser all params passed to eval.
 You can use the increment to let execute eval one time, for example: the first time with eval there are some variables declaration.
@@ -33,8 +32,8 @@ You can use the increment to let execute eval one time, for example: the first t
 JSADO injects into the webpage a js script, that hook the function. Once the function hooked is executed, the js script injected shows a pannel with the code catched.
 
 ##Personalization
-You can open jsado.py and edit: browserName, outputFileName
-For jsado_selenium.py and Chrome: the default port is 9515, if you need: change it.
+You can open jsado.py and change: browserName, outputFileName and useSelenium to don't set 'useS' every time 
+For Selenium and Chrome: the default port is 9515, if you need: change it.
 
 ##Developer
 [Luciano Giuseppe] (http://sites.google.com/site/lucianogiuseppeprogrammi/)
