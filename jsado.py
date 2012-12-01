@@ -196,14 +196,15 @@ def parseArgv(argv):
 	argLen = len(sys.argv)
 	for x in xrange(3,argLen): 
 		str = argv[x].split(':')
-		if str[0].lower() == "nexec":
+		matchStr = str[0].lower()
+		if matchStr == "nexec":
 			try:	
 				execLimit = int(str[1])
 			except ValueError:
 		    		print("Bad nExec value: assume it as 0")
-		elif str[0].lower() == "usejb":
+		elif matchStr == "usejb":
 			useJsBeauty = True;
-		elif str[0].lower() == "uses":
+		elif matchStr == "uses":
 			useSelenium = True
 	
 	return [execLimit, useJsBeauty]
@@ -239,18 +240,19 @@ if __name__ == "__main__":
 		launcher.start(hack.browserName, hack.outputUrlName)
 
 		#Some descryption about the use
-		print("If there're some ReferenceError errors in js console or the js deobuscated shows strange strings or seems to be obfuscated use increment!")
+		print("If there're some ReferenceError errors in js console or the js deobuscated shows strange strings or seems to be obfuscated use 'increment'!\n")
 	
 		#User want to increment the times that eval is normally executed
-		answer = raw_input("\nDo you want to increment the " + sys.argv[2] + " execution times? yes/no : ")
+		question = "Do you want to increment the %s execution times? yes/no : "%sys.argv[2]
+		answer = raw_input(question)
 		while answer.lower() in ('y', 'yes'):
 			execLimit += 1
 			if (hack.applyHack(sys.argv[1], sys.argv[2], execLimit, useJsBeauty) == 0):
 				print("An error occurred: byee!")
 				sys.exit()
-			print("Limit:%d - Page refreshing...\n"%execLimit)
+			print("%s execution limit:%d - page refreshing...\n"%(sys.argv[2],execLimit))
 			launcher.refresh() #refresh the page
-			answer = raw_input("Do you want to increment the " + sys.argv[2] + " execution times? yes/no : ")
+			answer = raw_input(question)
 	except WebDriverException as e:
 		print("Selenium error: %s\n"%e.msg.strip())
 		sys.exit(1)
