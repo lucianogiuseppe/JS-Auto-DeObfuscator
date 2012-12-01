@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# JS Auto DeObfuscator 0.6 by Luciano Giuseppe
+# JS Auto DeObfuscator 0.6.1 by Luciano Giuseppe
 # Useful on deobfuscation by a function as eval
 #
 #Dependencies: Selenium for python: http://pypi.python.org/pypi/selenium, Selenium server:http://seleniumhq.org/download/
@@ -118,16 +118,31 @@ class jsado:
 	#apply the hack to webpage for deobfuscate the js code
 	def applyHack(self, fileInput, functionName, limitExecution, useJB):
 		try:
-			if self.fileTxt is None:
+			if self.fileTxt is None: #only the first time
 				with open(fileInput, 'r') as f:
 					self.fileTxt = f.read()
+					
 
+			#generate the js code to inject into html
+			injString = ""	
+			if useJB == True:
+				injString += "<script src=\"http://jsbeautifier.org/beautify.js\" type=\"application/javascript\"></script>"
+			injString += self.__getHackString(functionName, limitExecution)
+			
+			#inject into html page
+			outHtml = self.fileTxt
+			if outHtml.find("<head>") != -1:
+				injString = "<head>"+injString
+				outHtml = outHtml.replace("<head>", injString)
+			elif outHtml.find("<html>") != -1:
+				injString = "<html>"+injString
+				outHtml = outHtml.replace("<html>", injString)
+			else:
+				outHtml = injString + outHtml
+			
+			#write the output html file
 			with open(self.outputFileName, 'w') as outFile:
-				outString = ""				
-				if useJB == True:
-					outString += "<script src=\"http://jsbeautifier.org/beautify.js\" type=\"application/javascript\"></script>"
-				outString += self.__getHackString(functionName, limitExecution)+self.fileTxt
-				outFile.write(outString)
+				outFile.write(outHtml)
 
 		except IOError as e:
 			print("I/O error({0}): {1}".format(e.errno, e.strerror))
@@ -195,7 +210,7 @@ def parseArgv(argv):
 
 # Main
 if __name__ == "__main__":
-	print("JS Auto DeObfuscator 0.6\n")	
+	print("JS Auto DeObfuscator 0.6.1\n")	
 
 	#checks the args
 	execLimit = 0
@@ -227,15 +242,15 @@ if __name__ == "__main__":
 		print("If there're some ReferenceError errors in js console or the js deobuscated shows strange strings or seems to be obfuscated use increment!")
 	
 		#User want to increment the times that eval is normally executed
-		answer = raw_input("\nDo you want to increment the " + sys.argv[2] + " execution times? y/n : ")
-		while (answer == "y"):
+		answer = raw_input("\nDo you want to increment the " + sys.argv[2] + " execution times? yes/no : ")
+		while answer.lower() in ('y', 'yes'):
 			execLimit += 1
 			if (hack.applyHack(sys.argv[1], sys.argv[2], execLimit, useJsBeauty) == 0):
 				print("An error occurred: byee!")
 				sys.exit()
 			print("Limit:%d - Page refreshing...\n"%execLimit)
 			launcher.refresh() #refresh the page
-			answer = raw_input("Do you want to increment the " + sys.argv[2] + " execution times? y/n : ")
+			answer = raw_input("Do you want to increment the " + sys.argv[2] + " execution times? yes/no : ")
 	except WebDriverException as e:
 		print("Selenium error: %s\n"%e.msg.strip())
 		sys.exit(1)
