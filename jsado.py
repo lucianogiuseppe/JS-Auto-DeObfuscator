@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# JS Auto DeObfuscator 0.6.1 by Luciano Giuseppe
+# JS Auto DeObfuscator 0.6.2 by Luciano Giuseppe
 # Useful on deobfuscation by a function as eval
 #
 #Dependencies: Selenium for python: http://pypi.python.org/pypi/selenium, Selenium server:http://seleniumhq.org/download/
@@ -19,7 +19,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 #you can personalize these:
 useSelenium = False # True o False
-browserName = "firefox" #the commandline istruction to run your browser
+browserName = "firefox" #the commandline istruction to run your browser or the complete path
 outputFileName = "t.html" #output filename
 
 #JS Auto DeObfuscator Class by Luciano Giuseppe
@@ -28,11 +28,12 @@ class jsado:
 	#Init some class attributes
 	#browserName: the commandline istruction to run your browser
 	#outputFileName: output filename
-	def __init__(self, browserName, outputFileName):
+	def __init__(self, browserName, outputFileName, injS = False):
 		self.fileTxt = None;
 		self.browserName = browserName
 		self.outputFileName = os.getcwd() + os.sep + outputFileName
 		self.outputUrlName = "file://"+self.outputFileName
+		self.injectStart = injS
 
 	#return a random string 
 	def __r(self):
@@ -131,14 +132,18 @@ class jsado:
 			
 			#inject into html page
 			outHtml = self.fileTxt
-			if outHtml.find("<head>") != -1:
-				injString = "<head>"+injString
-				outHtml = outHtml.replace("<head>", injString)
-			elif outHtml.find("<html>") != -1:
-				injString = "<html>"+injString
-				outHtml = outHtml.replace("<html>", injString)
-			else:
+			if self.injectStart == True:
 				outHtml = injString + outHtml
+			else:
+				if outHtml.find("<head>") != -1:
+					injString = "<head>"+injString
+					outHtml = outHtml.replace("<head>", injString)
+				elif outHtml.find("<html>") != -1:
+					injString = "<html><head>"+injString+"</head>"
+					outHtml = outHtml.replace("<html>", injString)
+				else:
+					self.injectStart = True #for the next iteration
+					outHtml = injString + outHtml
 			
 			#write the output html file
 			with open(self.outputFileName, 'w') as outFile:
@@ -192,6 +197,7 @@ def parseArgv(argv):
 	global useSelenium
 	execLimit = 0
 	useJsBeauty = False
+	injStart = False
 	
 	argLen = len(sys.argv)
 	for x in xrange(3,argLen): 
@@ -206,27 +212,30 @@ def parseArgv(argv):
 			useJsBeauty = True;
 		elif matchStr == "uses":
 			useSelenium = True
+		elif matchStr == "injstart": 
+			injStart = True
 	
-	return [execLimit, useJsBeauty]
+	return [execLimit, useJsBeauty, injStart]
 
 # Main
 if __name__ == "__main__":
-	print("JS Auto DeObfuscator 0.6.1\n")	
+	print("JS Auto DeObfuscator 0.6.2\n")	
 
 	#checks the args
 	execLimit = 0
 	useJsBeauty = False
+	injStart = False
 
 	argLen = len(sys.argv)	
 	if (argLen < 3):
-		print( os.path.basename(__file__)+" file.html function_to_hack [nExec:number] [useJB] [useS]")
+		print( os.path.basename(__file__)+" file.html function_to_hack [nExec:number] [useJB] [useS] [injStart]")
 		sys.exit()
 	else:
-		execLimit, useJsBeauty = parseArgv(sys.argv);
+		execLimit, useJsBeauty, injStart = parseArgv(sys.argv);
 	
 	try:	
 		#Prepare the jsado
-		hack = jsado(browserName, outputFileName)
+		hack = jsado(browserName, outputFileName, injStart)
 		#Prepare the browser launcher
 		launcher = LauncherFactory(useSelenium)
 
