@@ -7,7 +7,7 @@ This tool hopes to be useful to security researches for speed up their work.
 It uses to work as default browser Firefox, but at last line of the source you can change firefox with an other browser as Chrome, obviously.
 
 #Dependencies
-JsADO with Selenium needs to run: 
+JsADO with Selenium needs: 
 * Selenium for python: http://pypi.python.org/pypi/selenium
 * Selenium server:http://seleniumhq.org/download/
 * ChromeDriver for Chrome support: https://code.google.com/p/chromedriver/
@@ -18,7 +18,7 @@ If you want to use Chrome with Selenium you must run only the ChromeDriver.
 
 After that you can use these scripts: download jsado.py and run
 
-python jsado.py file.html function_to_hack [nExec:0] [useJB] [useS] [injStart]
+**python jsado.py file.html function_to_hack [nExec:0] [useJB] [useS] [injStart]**
 
 where 
 * nExec says that the function_to_hack have to be executed nExec times normally
