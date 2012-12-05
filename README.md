@@ -18,12 +18,13 @@ If you want to use Chrome with Selenium you must run only the ChromeDriver.
 
 After that you can use these scripts: download jsado.py and run
 
-python jsado.py file.html function_to_hack [nExec:0] [useJB] [useS]
+python jsado.py file.html function_to_hack [nExec:0] [useJB] [useS] [injStart]
 
 where 
 	nExec says that the function_to_hack have to be executed nExec times normally
 	useJB says to use "js beautify" to show the output
 	useS says to use Selenium
+	injStart to injects js deobfuscation code at file start
 
 For example: you can call this script with: "python jsado.py obf.html eval" to don't let's execute eval in obf.html and get into the browser all params passed to eval.
 You can use the increment to let execute eval one time, for example: the first time with eval there are some variables declaration.
