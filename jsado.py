@@ -178,6 +178,7 @@ class LauncherSelenium:
 	def refresh(self):
 		if self.browser == None:
 			return
+		print("Page refreshing...\n")
 		self.browser.refresh()
 
 #Normal browser launcher
@@ -188,6 +189,7 @@ class LauncherNormal:
 		subprocess.Popen([hack.browserName, hack.outputFileName]);
 	
 	def refresh(self):
+		print("You should refresh page into browser\n")
 		return
 
 
@@ -259,7 +261,7 @@ if __name__ == "__main__":
 			if (hack.applyHack(sys.argv[1], sys.argv[2], execLimit, useJsBeauty) == 0):
 				print("An error occurred: byee!")
 				sys.exit()
-			print("%s execution limit:%d - page refreshing...\n"%(sys.argv[2],execLimit))
+			print("%s execution limit:%d"%(sys.argv[2],execLimit))
 			launcher.refresh() #refresh the page
 			answer = raw_input(question)
 	except WebDriverException as e:
