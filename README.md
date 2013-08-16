@@ -22,7 +22,7 @@ After that you can use these scripts: download jsado.py and run
 
 where 
 * nExec says that the function_to_hack have to be executed nExec times normally
-* useJB says to use "js beautify" to show the output
+* useJB says to use "js beautify" to show the output: you have to create **beautify.js** (https://github.com/einars/js-beautify) into *outputFileName* dir 
 * useS says to use Selenium
 * injStart to injects js deobfuscation code at file start
 
