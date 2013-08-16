@@ -139,7 +139,7 @@ class jsado:
 			#generate the js code to inject into html
 			injString = ""	
 			if useJB == True:
-				injString += "<script src=\"beauity.js\" type=\"text/javascript\"></script>" #you should download js lib from https://github.com/einars/js-beautify
+				injString += "<script src=\"beautify.js\" type=\"text/javascript\"></script>" #you should download js lib from https://github.com/einars/js-beautify
 			injString += self.__getHackString(functionName, limitExecution)
 			
 			#inject into html page
@@ -233,7 +233,7 @@ def parseArgv(argv):
 
 # Main
 if __name__ == "__main__":
-	print("JS Auto DeObfuscator 0.6.2\n")	
+	print("JS Auto DeObfuscator\n")	
 
 	#checks the args
 	execLimit = 0
