@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# JS Auto DeObfuscator 0.6.2 by Luciano Giuseppe
+# JS Auto DeObfuscator 0.7 by Luciano Giuseppe
 # Useful on deobfuscation by a function as eval
 #
 #Dependencies: Selenium for python: http://pypi.python.org/pypi/selenium, Selenium server:http://seleniumhq.org/download/
@@ -12,15 +12,23 @@ import os
 import string
 import random
 
-#for selenium
-from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, WebDriverException
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-#you can personalize these:
+##You can personalize these params!!
 useSelenium = False # True o False
-browserName = "firefox" #the commandline istruction to run your browser or the complete path
+browserName = "firefox" #the command to run your browser or the complete path
 outputFileName = "t.html" #output filename
+##End of pesonalization params!!
+
+
+#check selenium presence
+canUseSelenium = True
+try:
+	from selenium import webdriver
+	from selenium.common.exceptions import NoSuchElementException, WebDriverException
+	from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+except:
+	canUseSelenium = False
+
 
 #JS Auto DeObfuscator Class by Luciano Giuseppe
 class jsado:
@@ -43,7 +51,7 @@ class jsado:
 	#get the js code to inject into page
 	def __getHackString(self,f, l):
 		hackStr = string.Template("""
-		<script type="application/javascript">
+		<script type="text/javascript">
 		(function () {
 		var $memFct = $function;
 		$cont = 0;
@@ -53,16 +61,18 @@ class jsado:
 				text = js_beautify(text)
 			return text.replace("&","&amp;",'g').replace("<","&lt;",'g').replace(">","&gt;",'g');
 		};
-		$function = function(input) {
+		$function = function(code) {
+
 			//parse the input
-			if(typeof(input) === "object") {
+			var input;
+			if(typeof(code) === "object") {
 				var str = "Object Dump:<br/>";
 				for(var t in input) {
-					str += t +":"+input[t]+"<br/>";			
+					str += t +":"+code[t]+"<br/>";			
 				}
 				input = str;			
-			} else if(typeof(input) === "string") {
-				input = $beautify(input)
+			} else if(typeof(code) === "string") {
+				input = $beautify(code)
 			}
 			
 			//get in output
@@ -111,7 +121,9 @@ class jsado:
 				}
 			}
 	
-			if($cont <= $limit) { return $memFct(input); }
+			if($cont <= $limit) { //can it exec $function
+				return $memFct(code); 
+			}
 		};
 		})()</script>\n""");
 		return hackStr.substitute({'function': f, 'limit' : l, 'memFct' : self.__r(), 'cont': self.__r(), 'str' : self.__r(), 'div': self.__r(), 'code': self.__r(), 'oldOnError' : self.__r(), 'p' : self.__r(), 'beautify' : self.__r()})
@@ -127,7 +139,7 @@ class jsado:
 			#generate the js code to inject into html
 			injString = ""	
 			if useJB == True:
-				injString += "<script src=\"http://jsbeautifier.org/beautify.js\" type=\"application/javascript\"></script>"
+				injString += "<script src=\"beauity.js\" type=\"text/javascript\"></script>" #you should download js lib from https://github.com/einars/js-beautify
 			injString += self.__getHackString(functionName, limitExecution)
 			
 			#inject into html page
@@ -196,7 +208,7 @@ class LauncherNormal:
 
 #Parse the argv
 def parseArgv(argv):
-	global useSelenium
+	global useSelenium, canUseSelenium
 	execLimit = 0
 	useJsBeauty = False
 	injStart = False
@@ -212,7 +224,7 @@ def parseArgv(argv):
 		    		print("Bad nExec value: assume it as 0")
 		elif matchStr == "usejb":
 			useJsBeauty = True;
-		elif matchStr == "uses":
+		elif matchStr == "uses" and canUseSelenium == True:
 			useSelenium = True
 		elif matchStr == "injstart": 
 			injStart = True
@@ -264,9 +276,6 @@ if __name__ == "__main__":
 			print("%s execution limit:%d"%(sys.argv[2],execLimit))
 			launcher.refresh() #refresh the page
 			answer = raw_input(question)
-	except WebDriverException as e:
-		print("Selenium error: %s\n"%e.msg.strip())
-		sys.exit(1)
 	except Exception as e:
 		print("Error: %s\n"%e)
 		sys.exit(1)
