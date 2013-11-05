@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-# JS Auto DeObfuscator 0.7.1 by Luciano Giuseppe
-# Useful on deobfuscation by a function as eval
+# JS Auto DeObfuscator 0.7.2 by Luciano Giuseppe
+# Useful on eval deobfuscation code
 #
 #Dependencies: Selenium for python: http://pypi.python.org/pypi/selenium, Selenium server:http://seleniumhq.org/download/
 #More infos: http://pypi.python.org/pypi/selenium
@@ -100,7 +100,7 @@ class jsado:
 				$div.appendChild(button);
 				$code = document.createElement("pre");
 				$code.setAttribute("readonly", "readonly");
-				$code.setAttribute("style","display:block; height:94%; width:96%; overflow:scroll;color:black;border: 1px solid #AAAAAA;background:white;font-size:14px;margin:0 0 0 3px;");
+				$code.setAttribute("style","display:block; height:94%; width:96%; overflow-y:scroll;color:black;border: 1px solid #AAAAAA;background:white;font-size:14px;margin:0 0 0 3px;word-break:break-word;word-break:break-all;white-space:pre-wrap;");
 				$div.appendChild($code);
 				//document object exists?
 				if(document.body === undefined || document.body === null)	{		
