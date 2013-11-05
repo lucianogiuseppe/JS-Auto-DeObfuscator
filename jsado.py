@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# JS Auto DeObfuscator 0.7 by Luciano Giuseppe
+# JS Auto DeObfuscator 0.7.1 by Luciano Giuseppe
 # Useful on deobfuscation by a function as eval
 #
 #Dependencies: Selenium for python: http://pypi.python.org/pypi/selenium, Selenium server:http://seleniumhq.org/download/
@@ -59,7 +59,7 @@ class jsado:
 		$beautify = function(text) {
 			if(window.js_beautify)
 				text = js_beautify(text)
-			return text.replace("&","&amp;",'g').replace("<","&lt;",'g').replace(">","&gt;",'g');
+			return text.replace(/[<>"&]/g, function(s) {return '&#' + s.charCodeAt(0) + ';'; });
 		};
 		$function = function(code) {
 
@@ -242,7 +242,7 @@ if __name__ == "__main__":
 
 	argLen = len(sys.argv)	
 	if (argLen < 3):
-		print( os.path.basename(__file__)+" file.html function_to_hack [nExec:number] [useJB] [useS] [injStart]")
+		print("How to use:\n"+ os.path.basename(__file__)+" file.html function_to_hack [nExec:number] [useJB] [useS] [injStart]\n\nSee the site for more information:\nhttp://github.com/lucianogiuseppe/JS-Auto-DeObfuscator")
 		sys.exit()
 	else:
 		execLimit, useJsBeauty, injStart = parseArgv(sys.argv);
